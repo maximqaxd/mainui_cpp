@@ -316,7 +316,7 @@ int UI_FadeAlpha( int starttime, int endtime )
 		return 0xFFFFFFFF;
 	}
 
-	time = ( gpGlobals->time * 1000 ) - starttime;
+	time = ( gpGlobals_m->time * 1000 ) - starttime;
 
 	if( time >= endtime )
 	{

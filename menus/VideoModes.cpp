@@ -255,7 +255,7 @@ void CMenuVidModes::SetConfig( )
 	if( testMode ) // show this dialog before changing any settings
 	{
 		testModeMsgBox.Show();
-		testModeTimer = gpGlobals->time + 10.0f; // ten seconds should be enough
+		testModeTimer = gpGlobals_m->time + 10.0f; // ten seconds should be enough
 	}
 
 	vsync.WriteCvar();
@@ -308,9 +308,9 @@ void CMenuVidModes::Draw()
 {
 	if( testModeMsgBox.IsVisible( ) && !FBitSet( testModeMsgBox.iFlags, QMF_CLOSING ))
 	{
-		if( testModeTimer - gpGlobals->time > 0 )
+		if( testModeTimer - gpGlobals_m->time > 0 )
 		{
-			snprintf( testModeMsg, sizeof( testModeMsg ), L( "Keep this resolution? %i seconds remaining" ), (int)(testModeTimer - gpGlobals->time) );
+			snprintf( testModeMsg, sizeof( testModeMsg ), L( "Keep this resolution? %i seconds remaining" ), (int)(testModeTimer - gpGlobals_m->time) );
 		}
 		else
 		{

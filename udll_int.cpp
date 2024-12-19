@@ -20,7 +20,7 @@ GNU General Public License for more details.
 
 ui_enginefuncs_t EngFuncs::engfuncs;
 ui_extendedfuncs_t EngFuncs::textfuncs;
-ui_globalvars_t	*gpGlobals;
+ui_globalvars_t	*gpGlobals_m;
 CMenu gMenu;
 
 static UI_FUNCTIONS gFunctionTable = 
@@ -58,7 +58,7 @@ extern "C" EXPORT int GetMenuAPI(UI_FUNCTIONS *pFunctionTable, ui_enginefuncs_t*
 	memcpy( &EngFuncs::engfuncs, pEngfuncsFromEngine, sizeof( ui_enginefuncs_t ));
 	memset( &EngFuncs::textfuncs, 0, sizeof( ui_extendedfuncs_t ));
 
-	gpGlobals = pGlobals;
+	gpGlobals_m = pGlobals;
 
 	return TRUE;
 }

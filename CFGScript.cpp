@@ -22,7 +22,7 @@ GNU General Public License for more details.
 #define CVAR_USERINFO BIT(1)
 
 
-const char *cvartypes[] = { NULL, "BOOL" , "NUMBER", "LIST", "STRING" };
+const char *cvartypes_m[] = { NULL, "BOOL" , "NUMBER", "LIST", "STRING" };
 
 struct parserstate_t
 {
@@ -71,7 +71,7 @@ cvartype_t CSCR_ParseType( parserstate_t *ps )
 
 	for ( i = 1; i < T_COUNT; ++i )
 	{
-		if( CSCR_ExpectString( ps, cvartypes[i], false, false ) )
+		if( CSCR_ExpectString( ps, cvartypes_m[i], false, false ) )
 			return (cvartype_t)i;
 	}
 

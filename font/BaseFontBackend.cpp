@@ -561,7 +561,7 @@ int CBaseFont::DrawCharacter(int ch, Point pt, int charH, const unsigned int col
 struct char_data_t
 {
 	uint32_t ch;
-	int32_t a, b, c;
+	int a, b, c;
 	uint32_t left, right, top, bottom;
 };
 

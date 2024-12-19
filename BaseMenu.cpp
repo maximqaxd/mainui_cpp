@@ -573,7 +573,7 @@ bool UI_StartBackGroundMap( void )
 	first = FALSE;
 
 	// some map is already running
-	if( uiStatic.bgmaps.IsEmpty() || CL_IsActive() || gpGlobals->demoplayback )
+	if( uiStatic.bgmaps.IsEmpty() || CL_IsActive() || gpGlobals_m->demoplayback )
 		return FALSE;
 
 	int bgmapid = EngFuncs::RandomLong( 0, uiStatic.bgmaps.Count() - 1 );

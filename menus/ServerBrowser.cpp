@@ -322,7 +322,7 @@ public:
 	{
 		filterMaps.RemoveAll();
 		servers.RemoveAll();
-		serversRefreshTime = gpGlobals->time;
+		serversRefreshTime = gpGlobals_m->time;
 	}
 
 	bool IsHavePassword( int line )
@@ -448,7 +448,7 @@ void UI_ServerBrowser_Menu( void )
 		return;
 
 	// stop demos to allow network sockets to open
-	if ( gpGlobals->demoplayback && EngFuncs::GetCvarFloat( "cl_background" ))
+	if ( gpGlobals_m->demoplayback && EngFuncs::GetCvarFloat( "cl_background" ))
 	{
 		uiStatic.m_iOldMenuDepth = uiStatic.menu.Count();
 		EngFuncs::ClientCmd( FALSE, "stop\n" );

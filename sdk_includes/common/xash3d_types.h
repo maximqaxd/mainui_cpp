@@ -205,7 +205,7 @@ typedef unsigned int  dword;
 typedef unsigned int  uint;
 typedef unsigned long ulong;
 typedef char		string[MAX_STRING];
-typedef struct file_s	file_t;		// normal file
+typedef struct file_s	dc_file_t;		// normal file
 typedef struct stream_s	stream_t;		// sound stream for background music playing
 typedef off_t fs_offset_t;
 #if XASH_WIN32

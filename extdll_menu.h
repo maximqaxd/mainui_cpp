@@ -83,9 +83,10 @@ typedef int (*cmpfunc)( const void *a, const void *b );
 typedef int BOOL;
 typedef int qboolean;
 typedef unsigned char byte;
+#if !XASH_DREAMCAST
 typedef unsigned int uint;
 typedef unsigned int uint32; //!!!
-
+#endif 
 #include "menu_int.h"
 
 #endif//EXTDLL_H

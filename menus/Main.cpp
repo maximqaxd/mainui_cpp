@@ -57,10 +57,10 @@ private:
 	void DisconnectDialogCb();
 	void HazardCourseDialogCb();
 	void HazardCourseCb();
-
+#if !XASH_DREAMCAST
 	CMenuAnimatedBanner animatedBanner;
 	CMenuMovieBanner movieBanner;
-
+#endif
 	CMenuPicButton	console;
 	CMenuPicButton	resumeGame;
 	CMenuPicButton	disconnect;
@@ -73,10 +73,11 @@ private:
 	CMenuPicButton	previews;
 	CMenuPicButton	quit;
 
+#if !XASH_DREAMCAST
 	// buttons on top right. Maybe should be drawn if fullscreen == 1?
 	CMenuBitmap	minimizeBtn;
 	CMenuBitmap	quitButton;
-
+#endif
 	// quit dialog
 	CMenuYesNoMessageBox dialog;
 
@@ -177,7 +178,7 @@ void CMenuMain::_Init( void )
 	console.SetNameAndStatus( L( "GameUI_Console" ), L( "Show console" ) );
 	console.iFlags |= QMF_NOTIFY;
 	console.SetPicture( PC_CONSOLE );
-	console.SetVisibility( gpGlobals->developer );
+	console.SetVisibility( gpGlobals_m->developer );
 	SET_EVENT_MULTI( console.onReleased,
 	{
 		UI_SetActiveMenu( FALSE );
@@ -231,7 +232,7 @@ void CMenuMain::_Init( void )
 	quit.SetPicture( PC_QUIT );
 	quit.iFlags |= QMF_NOTIFY;
 	quit.onReleased = VoidCb( &CMenuMain::QuitDialogCb );
-
+#if !XASH_DREAMCAST
 	quitButton.SetPicture( ART_CLOSEBTN_N, ART_CLOSEBTN_F, ART_CLOSEBTN_D );
 	quitButton.iFlags = QMF_MOUSEONLY;
 	quitButton.eFocusAnimation = QM_HIGHLIGHTIFFOCUS;
@@ -241,7 +242,7 @@ void CMenuMain::_Init( void )
 	minimizeBtn.iFlags = QMF_MOUSEONLY;
 	minimizeBtn.eFocusAnimation = QM_HIGHLIGHTIFFOCUS;
 	minimizeBtn.onReleased.SetCommand( FALSE, "minimize\n" );
-
+#endif
 	if ( gMenu.m_gameinfo.gamemode == GAME_MULTIPLAYER_ONLY || gMenu.m_gameinfo.startmap[0] == 0 )
 		newGame.SetGrayed( true );
 
@@ -267,7 +268,7 @@ void CMenuMain::_Init( void )
 		hazardCourse.SetGrayed( true );
 		newGame.SetGrayed( true );
 	}
-
+#if !XASH_DREAMCAST
 	if( FBitSet( gMenu.m_gameinfo.flags, GFL_ANIMATED_TITLE ))
 	{
 		if( animatedBanner.TryLoad())
@@ -277,7 +278,7 @@ void CMenuMain::_Init( void )
 	{
 		AddItem( movieBanner );
 	}
-
+#endif
 	dialog.Link( this );
 
 	AddItem( banner );
@@ -298,8 +299,10 @@ void CMenuMain::_Init( void )
 
 	AddItem( previews );
 	AddItem( quit );
+#if !XASH_DREAMCAST
 	AddItem( minimizeBtn );
 	AddItem( quitButton );
+#endif
 }
 
 /*
@@ -317,9 +320,11 @@ void CMenuMain::VidInit( bool connected )
 	// no visible console button gap
 	int ygap = (( 404 - 373 ) / 480.0 ) * 768.0;
 
+#if !XASH_DREAMCAST	
 	// statically positioned items
 	minimizeBtn.SetRect( uiStatic.width - 72, 13, 32, 32 );
 	quitButton.SetRect( uiStatic.width - 36, 13, 32, 32 );
+#endif
 
 	previews.SetCoord( hoffset, previews_voffset );
 	quit.SetCoord( hoffset, previews_voffset + ygap );
@@ -336,7 +341,7 @@ void CMenuMain::VidInit( bool connected )
 	multiPlayer.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
 
-	bool single = gpGlobals->maxClients < 2;
+	bool single = gpGlobals_m->maxClients < 2;
 
 	saveRestore.SetCoord( hoffset, yoffset );
 	yoffset -= ygap;
@@ -393,7 +398,7 @@ void CMenuMain::_VidInit()
 
 void CMenuMain::Think()
 {
-	if( gpGlobals->developer )
+	if( gpGlobals_m->developer )
 	{
 		if( !console.IsVisible( ))
 			console.Show();

@@ -48,7 +48,7 @@ void DBG_AssertFunction( bool fExpr, const char* szExpr, const char* szFile, int
 #define ASSERTSZ( f, sz )
 #endif
 
-extern ui_globalvars_t		*gpGlobals;
+extern ui_globalvars_t		*gpGlobals_m;
 
 // exports
 extern int UI_VidInit( void );
@@ -85,9 +85,9 @@ void UI_ConnectionProgress_ParseServerInfo( const char *server );
 extern "C" EXPORT void AddTouchButtonToList( const char *name, const char *texture, const char *command, unsigned char *color, int flags );
 
 // ScreenHeight returns the height of the screen, in ppos.xels
-#define ScreenHeight	((float)(gpGlobals->scrHeight))
+#define ScreenHeight	((float)(gpGlobals_m->scrHeight))
 // ScreenWidth returns the width of the screen, in ppos.xels
-#define ScreenWidth		((float)(gpGlobals->scrWidth))
+#define ScreenWidth		((float)(gpGlobals_m->scrWidth))
 
 #define Alpha( x )	( ((x) & 0xFF000000 ) >> 24 )
 #define Red( x )	( ((x) & 0xFF0000) >> 16 )

@@ -90,8 +90,8 @@ void CMenuField::_Event( int ev )
 		if( m_pParent && !IsAbsolutePositioned() )
 			originalY += m_pParent->GetRenderPosition().y;
 
-		if( originalY > gpGlobals->scrHeight - 100 * uiStatic.scaleY )
-			m_scPos.y = gpGlobals->scrHeight - 100 * uiStatic.scaleY;
+		if( originalY > gpGlobals_m->scrHeight - 100 * uiStatic.scaleY )
+			m_scPos.y = gpGlobals_m->scrHeight - 100 * uiStatic.scaleY;
 		else
 			VidInit();
 	}

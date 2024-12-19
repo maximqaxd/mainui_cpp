@@ -20,7 +20,7 @@ GNU General Public License for more details.
 #include "Bitmap.h"
 #include "utlvector.h"
 
-#define ART_BACKGROUND		"gfx/shell/splash.bmp"
+#define ART_BACKGROUND		"gfx/menu_backdrop.pvr"
 
 // Ultimate class that support multiple types of background: fillColor, WON-style, GameUI-style
 class CMenuBackgroundBitmap: public CMenuBitmap

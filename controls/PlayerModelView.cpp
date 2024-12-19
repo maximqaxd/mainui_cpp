@@ -57,7 +57,7 @@ void CMenuPlayerModelView::VidInit()
 	ent->index = 0;
 	ent->curstate.body = 0;
 	ent->curstate.number = 1;	// IMPORTANT: always set playerindex to 1
-	ent->curstate.animtime = gpGlobals->time;	// start animation
+	ent->curstate.animtime = gpGlobals_m->time;	// start animation
 	ent->curstate.sequence = 1;
 	ent->curstate.scale = 1.0f;
 	ent->curstate.frame = 0.0f;

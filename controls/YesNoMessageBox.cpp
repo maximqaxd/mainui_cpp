@@ -123,7 +123,7 @@ CMenuYesNoMessageBox::Draw
 */
 void CMenuYesNoMessageBox::Draw( void )
 {
-	UI_FillRect( 0,0, gpGlobals->scrWidth, gpGlobals->scrHeight, 0x40000000 );
+	UI_FillRect( 0,0, gpGlobals_m->scrWidth, gpGlobals_m->scrHeight, 0x40000000 );
 	CMenuBaseWindow::Draw();
 }
 

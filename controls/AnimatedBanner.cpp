@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "AnimatedBanner.h"
 
-#define ART_LOGO      "resource/logo.tga"
+#define ART_LOGO      "gfx/menu_title.pvr"
 #define ART_BLIP1     "resource/logo_blip.tga"
 #define ART_BLIP2     "resource/logo_blip2.tga"
 #define ART_BLUR      "resource/logo_big_blurred_%i"
@@ -32,6 +32,7 @@ bool CMenuAnimatedBanner::TryLoad()
 	if( !logo.IsValid( ))
 		return false;
 
+#if !XASH_DREAMCAST
 	logoBlip[0].Load( ART_BLIP1 );
 	logoBlip[1].Load( ART_BLIP2 );
 	for( int i = 0; i < ART_BLIP_NUM; i++ )
@@ -53,7 +54,7 @@ bool CMenuAnimatedBanner::TryLoad()
 		if( !logoBlurBlip[i].IsValid( ))
 			return false;
 	}
-
+#endif
 	return true;
 }
 
@@ -61,13 +62,21 @@ void CMenuAnimatedBanner::VidInit()
 {
 	// in hardware mode, it's scaled by screen width
 	// in software mode, scale must be 1.0f
+	// Debug print to check actual loaded dimensions
+    Size originalSz = EngFuncs::PIC_Size(logo.Handle());
+    Con_Printf("Original logo size: %dx%d\n", originalSz.w, originalSz.h);
+
 	scale = ScreenWidth / 1024.0f;
 
 	Size logoSz = EngFuncs::PIC_Size(logo.Handle());
 
-	logoSz = logoSz * scale;
-	m_nLogoImageXMin = (ScreenWidth / 2.0f - logoSz.w / 2.0f) - scale * 88.0f;
-	m_nLogoImageXMax = (ScreenWidth / 2.0f - logoSz.w / 2.0f) + scale * 32.0f;
+	// Maintain aspect ratio for the logo
+    logoSz.w = 128 * scale;
+    logoSz.h = 512 * scale;
+
+    // Update positioning calculations
+    m_nLogoImageXMin = (ScreenWidth / 2.0f - logoSz.w / 2.0f) - scale * 88.0f;
+    m_nLogoImageXMax = (ScreenWidth / 2.0f - logoSz.w / 2.0f) + scale * 32.0f;
 	m_nLogoImageXGoal = m_nLogoImageXMax;
 	m_nNextLogoBlipType = E_LOGO_BLIP_BOTH;
 	m_flTimeLogoNewGoalMin = 0.4f;
@@ -89,11 +98,11 @@ void CMenuAnimatedBanner::VidInit()
 	m_nLogoBGOffsetY = m_nLogoImageY - scale * 54.0f;
 	m_fLogoSpeedMin = scale * 13.0f;
 	m_fLogoSpeedMax = scale * 65.0f;
-	m_flPrevFrameTime = gpGlobals->time;
+	m_flPrevFrameTime = gpGlobals_m->time;
 
-	RandomizeGoalTime( gpGlobals->time + m_flTimeLogoNewGoalMin );
+	RandomizeGoalTime( gpGlobals_m->time + m_flTimeLogoNewGoalMin );
 	RandomizeSpeed( m_fLogoSpeedMin );
-	RandomizeBlipTime( gpGlobals->time + m_flTimeUntilLogoBlipMin );
+	RandomizeBlipTime( gpGlobals_m->time + m_flTimeUntilLogoBlipMin );
 }
 
 void CMenuAnimatedBanner::RandomizeGoalTime( float time )
@@ -144,11 +153,15 @@ void CMenuAnimatedBanner::Draw()
 		return;
 
 	Point logoPt( m_fLogoImageX, m_nLogoImageY );
-	Size logoSz = EngFuncs::PIC_Size( logo.Handle( )) * scale;
+	Size logoSz = EngFuncs::PIC_Size( logo.Handle( ));
+
+	logoSz.w = 128 * scale;
+    logoSz.h = 512 * scale;
+
 
 	EngFuncs::PIC_Set( logo.Handle(), 255, 255, 255 );
 	EngFuncs::PIC_DrawTrans( logoPt, logoSz );
-
+#if !XASH_DREAMCAST
 	for( int i = 0; i < ART_BLIP_NUM; i++ )
 	{
 		if( drawBlip[i] )
@@ -157,6 +170,7 @@ void CMenuAnimatedBanner::Draw()
 			EngFuncs::PIC_DrawTrans( logoPt, logoSz );
 		}
 	}
+#endif
 
 #if 0
 	// makes big logo centered but in original it's a bit offset
@@ -171,7 +185,7 @@ void CMenuAnimatedBanner::Draw()
 
 	logoPt.x += t3;
 	logoPt.y = m_nLogoBGOffsetY;
-
+#if !XASH_DREAMCAST
 	const CImage *images = drawBgBlip ? logoBlurBlip : logoBlur;
 	for( int i = 0; i < ART_BLUR_NUM; i++ )
 	{
@@ -182,6 +196,7 @@ void CMenuAnimatedBanner::Draw()
 
 		logoPt.x += logoSz.w;
 	}
+#endif
 }
 
 void CMenuAnimatedBanner::Think()
@@ -189,10 +204,10 @@ void CMenuAnimatedBanner::Think()
 	// m_fLogoImageX = uiStatic.cursorX;
 	// return;
 
-	float deltatime = gpGlobals->time - m_flPrevFrameTime;
+	float deltatime = gpGlobals_m->time - m_flPrevFrameTime;
 	deltatime = bound( 0.0001, deltatime, 0.3 );
 
-	m_flPrevFrameTime = gpGlobals->time;
+	m_flPrevFrameTime = gpGlobals_m->time;
 
 	float deltaX = deltatime * m_fLogoSpeed;
 
@@ -200,9 +215,9 @@ void CMenuAnimatedBanner::Think()
 	{
 		m_fLogoImageX -= deltaX;
 
-		if( m_fLogoImageX <= m_nLogoImageXGoal || gpGlobals->time >= m_flTimeLogoNewGoal )
+		if( m_fLogoImageX <= m_nLogoImageXGoal || gpGlobals_m->time >= m_flTimeLogoNewGoal )
 		{
-			RandomizeGoalTime( gpGlobals->time + m_flTimeLogoNewGoalMin );
+			RandomizeGoalTime( gpGlobals_m->time + m_flTimeLogoNewGoalMin );
 			RandomizeSpeed( m_fLogoSpeedMin );
 
 			m_nLogoImageXGoal = m_nLogoImageXMax;
@@ -212,9 +227,9 @@ void CMenuAnimatedBanner::Think()
 	{
 		m_fLogoImageX += deltaX;
 
-		if( m_fLogoImageX >= m_nLogoImageXGoal || gpGlobals->time >= m_flTimeLogoNewGoal )
+		if( m_fLogoImageX >= m_nLogoImageXGoal || gpGlobals_m->time >= m_flTimeLogoNewGoal )
 		{
-			RandomizeGoalTime( gpGlobals->time + m_flTimeLogoNewGoalMin );
+			RandomizeGoalTime( gpGlobals_m->time + m_flTimeLogoNewGoalMin );
 			RandomizeSpeed( m_fLogoSpeedMin );
 
 			m_nLogoImageXGoal = m_nLogoImageXMin;
@@ -224,9 +239,11 @@ void CMenuAnimatedBanner::Think()
 	drawBlip[0] = drawBlip[1] = false;
 	drawBgBlip = false;
 
-	if( gpGlobals->time > m_flTimeLogoBlip )
+#if !XASH_DREAMCAST
+
+	if( gpGlobals_m->time > m_flTimeLogoBlip )
 	{
-		RandomizeBlipTime( gpGlobals->time + m_flTimeUntilLogoBlipMin );
+		RandomizeBlipTime( gpGlobals_m->time + m_flTimeUntilLogoBlipMin );
 		RandomizeBlip();
 	}
 	else
@@ -240,7 +257,7 @@ void CMenuAnimatedBanner::Think()
 		else
 			timeToBlip = 0.06f;
 
-		if( gpGlobals->time + timeToBlip > m_flTimeLogoBlip )
+		if( gpGlobals_m->time + timeToBlip > m_flTimeLogoBlip )
 		{
 			switch( m_nLogoBlipType )
 			{
@@ -256,7 +273,7 @@ void CMenuAnimatedBanner::Think()
 				break;
 			case E_LOGO_BLIP_STAGGER:
 				drawBgBlip  = true;
-				drawBlip[0] = gpGlobals->time + ( timeToBlip / 2.0f ) <= m_flTimeLogoBlip;
+				drawBlip[0] = gpGlobals_m->time + ( timeToBlip / 2.0f ) <= m_flTimeLogoBlip;
 				break;
 			case E_LOGO_BLIP_BOTH_SHOW_BLIP_LOGO_ONLY:
 				drawBgBlip  = true;
@@ -266,4 +283,5 @@ void CMenuAnimatedBanner::Think()
 			}
 		}
 	}
+#endif
 }

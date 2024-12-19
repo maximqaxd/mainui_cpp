@@ -98,7 +98,7 @@ void CMenuCredits::Draw( void )
 	// now draw the credits
 	UI_ScaleCoords( NULL, NULL, NULL, &h );
 
-	y = ScreenHeight - (((gpGlobals->time * 1000) - startTime ) / speed );
+	y = ScreenHeight - (((gpGlobals_m->time * 1000) - startTime ) / speed );
 
 	// draw the credits
 	for ( i = 0; i < numLines && credits[i]; i++, y += h )
@@ -108,7 +108,7 @@ void CMenuCredits::Draw( void )
 
 		if(( y < ( ScreenHeight - h ) / 2 ) && i == numLines - 1 )
 		{
-			if( !fadeTime ) fadeTime = (gpGlobals->time * 1000);
+			if( !fadeTime ) fadeTime = (gpGlobals_m->time * 1000);
 			color = UI_FadeAlpha( fadeTime, showTime );
 			if( UnpackAlpha( color ))
 				UI_DrawString( uiStatic.hDefaultFont, 0, ( ScreenHeight - h ) / 2, ScreenWidth, h, credits[i], color, h, QM_CENTER, ETF_SHADOW | ETF_FORCECOL );
@@ -208,7 +208,7 @@ void CMenuCredits::_Init( void )
 void CMenuCredits::Reload( void )
 {
 	// run credits
-	startTime = (gpGlobals->time * 1000) + 500; // make half-seconds delay
+	startTime = (gpGlobals_m->time * 1000) + 500; // make half-seconds delay
 	showTime = bound( 1000, strlen( credits[numLines - 1]) * 1000, 10000 );
 	fadeTime = 0; // will be determined later
 	active = true;

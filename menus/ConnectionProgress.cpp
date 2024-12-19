@@ -283,7 +283,7 @@ void CMenuConnectionProgress::_VidInit( void )
 	consoleButton.SetRect( 188, cursor, UI_BUTTONS_WIDTH / 2, UI_BUTTONS_HEIGHT );
 	disconnectButton.SetRect( 338, cursor, UI_BUTTONS_WIDTH / 2, UI_BUTTONS_HEIGHT );
 
-	if( gpGlobals->developer )
+	if( gpGlobals_m->developer )
 		consoleButton.Hide();
 
 	cursor -= 30;
@@ -331,7 +331,7 @@ void CMenuConnectionProgress::Draw( void )
 		Hide();
 		return;
 	}
-	UI_FillRect( 0,0, gpGlobals->scrWidth, gpGlobals->scrHeight, m_iState == STATE_NONE ? 0xFF000000 : 0x40000000 );
+	UI_FillRect( 0,0, gpGlobals_m->scrWidth, gpGlobals_m->scrHeight, m_iState == STATE_NONE ? 0xFF000000 : 0x40000000 );
 	CMenuBaseWindow::Draw();
 }
 
