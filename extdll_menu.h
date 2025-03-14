@@ -84,8 +84,9 @@ typedef int BOOL;
 typedef int qboolean;
 typedef unsigned char byte;
 typedef unsigned int uint;
+#if !XASH_DREAMCAST
 typedef unsigned int uint32; //!!!
-
+#endif
 #include "menu_int.h"
 
 #endif//EXTDLL_H
